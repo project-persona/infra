@@ -1,10 +1,10 @@
-const { Worker } = require('../../index')
+const Worker = require('../worker')
 
 const { makeResponse, makeErrorResponse, validateRequest } = require('./utils')
 
 const RpcProvider = require('./rpc-provider')
 
-module.exports = class JsonRpcWorker extends Worker {
+module.exports = class RpcWorker extends Worker {
   constructor (service, provider, address) {
     super(address)
 
@@ -47,7 +47,7 @@ module.exports = class JsonRpcWorker extends Worker {
     }
 
     const method = request.method.replace(service + '/', '')
-    if (typeof this.provider.prototype[method] !== 'function') {
+    if (typeof Reflect.get(this.provider.prototype, method) !== 'function') {
       return [Buffer.from(JSON.stringify(
         makeErrorResponse(
           request.id,
@@ -63,12 +63,16 @@ module.exports = class JsonRpcWorker extends Worker {
       params.push(request.params)
     }
 
-    // TODO: construct a context object and bind to the provider instance
+    const context = Object.assign({}, ...Reflect.ownKeys(request)
+      .filter(key => key.startsWith('x-'))
+      .map(key => ({
+        [key.slice(2)]: Reflect.get(request, key)
+      })))
 
-    const instance = Reflect.construct(this.provider, [])
+    const instance = Reflect.construct(this.provider, [context])
     try {
       return [Buffer.from(JSON.stringify(
-        makeResponse(request.id, await Reflect.apply(instance[method], instance, params))
+        makeResponse(request.id, await Reflect.apply(Reflect.get(instance, method), instance, params))
       ), 'utf-8')]
     } catch (err) {
       return [Buffer.from(JSON.stringify(
