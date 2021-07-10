@@ -4,7 +4,6 @@ const Client = require('../client')
 
 const INSTANTIATION_TOKEN = Symbol('INSTANTIATION_TOKEN')
 
-// TODO: insert contextual messages if necessary
 module.exports = class RpcClient extends Client {
   constructor (address, context, token) {
     super(address)

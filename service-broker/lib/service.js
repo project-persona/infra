@@ -12,8 +12,9 @@ module.exports = class Service {
   constructor (socket, name) {
     this.socket = socket
     this.name = name
-    this.workers = new Map()
-    this.requests = []
+    this.workers = []
+
+    this.i = 0
   }
 
   /**
@@ -22,8 +23,21 @@ module.exports = class Service {
    * @param req {Buffer}
    */
   dispatchRequest (client, ...req) {
-    this.requests.push([client, req])
-    this.dispatchPending().catch(console.error)
+    if (this.workers.length === 0) {
+      return // let it time out
+    }
+
+    const worker = this.workers[this.i++ % this.workers.length]
+    console.log(`Dispatching '${this.name}' ${Buffer.from(client).toString('hex')} req -> ${Buffer.from(worker).toString('hex')}`)
+    this.socket.send([
+      worker,
+      null,
+      Header.Worker,
+      Message.Request,
+      client,
+      null,
+      ...req
+    ]).catch(console.error)
   }
 
   /**
@@ -34,34 +48,8 @@ module.exports = class Service {
    * @returns {Promise<void>}
    */
   async dispatchReply (worker, client, ...rep) {
-    this.workers.set(worker.toString('hex'), worker)
-
     console.log(`Dispatching '${this.name}' ${client.toString('hex')} <- rep ${worker.toString('hex')}`)
-
     await this.socket.send([client, null, Header.Client, this.name, ...rep])
-
-    this.dispatchPending().catch(console.error)
-  }
-
-  // TODO: change to non-blocking working mode
-  async dispatchPending () {
-    while (this.workers.size && this.requests.length) {
-      const [key, worker] = this.workers.entries().next().value
-      this.workers.delete(key)
-      const [client, req] = this.requests.shift()
-
-      console.log(`Dispatching '${this.name}' ${Buffer.from(client).toString('hex')} req -> ${Buffer.from(worker).toString('hex')}`)
-
-      await this.socket.send([
-        worker,
-        null,
-        Header.Worker,
-        Message.Request,
-        client,
-        null,
-        ...req
-      ])
-    }
   }
 
   /**
@@ -70,7 +58,6 @@ module.exports = class Service {
    */
   register (worker) {
     console.log(`Registered worker ${worker.toString('hex')} for '${this.name}'`)
-    this.workers.set(worker.toString('hex'), worker)
-    this.dispatchPending().catch(console.error)
+    this.workers.push(worker)
   }
 }
