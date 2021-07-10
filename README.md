@@ -54,7 +54,7 @@ $ npm run service-broker
 
 #### Client Process
 
-## [Gateway](./gateway)
+## [Gateway](api-gateway)
 
 a JSON-RPC 2.0 over HTTP gateway exposing microservices connected to the service bus
 

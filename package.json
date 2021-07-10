@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start-broker": "npm start --prefix ./service-broker",
+    "start-gateway": "npm start --prefix ./api-gateway",
     "lint": "standard",
     "test": "npm run lint && echo \"Warning: no test specified\"",
     "prepare": "husky install"
@@ -17,6 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@persona/api-gateway": "file:api-gateway",
     "@persona/service-broker": "file:service-broker"
   },
   "devDependencies": {

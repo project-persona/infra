@@ -1,0 +1,22 @@
+{
+  "name": "@persona/api-gateway",
+  "version": "0.1.0",
+  "description": "a Koa.js powered HTTP server connect to microservices via a service broker",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bin/start-gateway.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@csil-git1.cs.surrey.sfu.ca:cmpt-470-project-group-6/infra"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@persona/infra": "file:..",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compress": "^5.0.1"
+  }
+}

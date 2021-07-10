@@ -1,9 +1,12 @@
 function validateRequest (request) {
-  if (request.id !== undefined &&
-    typeof request.id !== 'string' &&
-    typeof request.id !== 'number' &&
-    request.id !== null) {
-    return new Error('"id" is not a string, number, or null')
+  if (request.jsonrpc !== '2.0') {
+    throw new Error('"jsonrpc" must be "2.0"')
+  }
+
+  if (request.id === undefined ||
+    (typeof request.id !== 'string' && typeof request.id !== 'number' && request.id !== null)
+  ) {
+    throw new Error('"id" is not a string, number, or null')
   }
 
   if (!request.method || typeof request.method !== 'string') {
@@ -28,6 +31,10 @@ function validateRequest (request) {
     // noop
   } else {
     throw new Error('"params" is not an object or array')
+  }
+
+  if (request['x-context'] !== undefined && typeof request['x-context'] !== 'object') {
+    throw new Error('"x-context" is not an object or array')
   }
 }
 
