@@ -8,7 +8,7 @@ const { BROKER_ADDR } = require('./config')
 module.exports = class Broker {
   constructor (address = BROKER_ADDR) {
     this.address = address
-    this.socket = new Router({ sendHighWaterMark: 1, sendTimeout: 1 })
+    this.socket = new Router({ sendHighWaterMark: 1, sendTimeout: 1 }) // TODO: extract constants to config?
     this.services = new Map()
     this.workers = new Map()
   }

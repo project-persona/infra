@@ -43,6 +43,7 @@ module.exports = class Service {
     this.dispatchPending().catch(console.error)
   }
 
+  // TODO: change to non-blocking working mode
   async dispatchPending () {
     while (this.workers.size && this.requests.length) {
       const [key, worker] = this.workers.entries().next().value

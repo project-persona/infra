@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const Broker = require('../lib/broker')
+const { Broker } = require('..')
 
 new Broker().start().catch(err => {
   err.stack = 'Fatal uncaught error: ' + err.stack
