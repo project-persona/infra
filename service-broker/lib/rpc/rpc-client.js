@@ -6,16 +6,18 @@ const INSTANTIATION_TOKEN = Symbol('INSTANTIATION_TOKEN')
 
 // TODO: insert contextual messages if necessary
 module.exports = class RpcClient extends Client {
-  constructor (address, token) {
+  constructor (address, context, token) {
     super(address)
+
+    this.context = context
 
     if (token !== INSTANTIATION_TOKEN) {
       throw new Error('Create a client via RpcClient.create() static method')
     }
   }
 
-  static create (address) {
-    const instance = new RpcClient(address, INSTANTIATION_TOKEN)
+  static create (address, context) {
+    const instance = new RpcClient(address, context, INSTANTIATION_TOKEN)
 
     return new Proxy(() => undefined, {
       get (target, service, receiver) {
@@ -26,7 +28,8 @@ module.exports = class RpcClient extends Client {
                 jsonrpc: '2.0',
                 id: uuid(),
                 method: `${service}/${method}`,
-                params
+                params,
+                'x-context': context
               }), 'utf-8')))[0]
 
               const response = JSON.parse(json.toString('utf-8'))

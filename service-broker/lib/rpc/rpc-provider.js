@@ -1,5 +1,7 @@
 module.exports = class RpcProvider {
-  constructor (ctx = {}) {
-    this.ctx = ctx
+  constructor ({ context = { type: 'user' }, services, systemServices }) {
+    this.context = context
+    this.services = services
+    this.systemServices = systemServices
   }
 }

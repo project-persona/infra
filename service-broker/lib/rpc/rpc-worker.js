@@ -3,6 +3,7 @@ const Worker = require('../worker')
 const { makeResponse, makeErrorResponse, validateRequest } = require('./utils')
 
 const RpcProvider = require('./rpc-provider')
+const RpcClient = require('./rpc-client')
 
 module.exports = class RpcWorker extends Worker {
   constructor (service, provider, address) {
@@ -14,6 +15,8 @@ module.exports = class RpcWorker extends Worker {
 
     this.service = service
     this.provider = provider
+
+    this.systemServices = RpcClient.create(address, { type: 'system' })
   }
 
   async process (buffer) {
@@ -63,13 +66,15 @@ module.exports = class RpcWorker extends Worker {
       params.push(request.params)
     }
 
-    const context = Object.assign({}, ...Reflect.ownKeys(request)
-      .filter(key => key.startsWith('x-'))
-      .map(key => ({
-        [key.slice(2)]: Reflect.get(request, key)
-      })))
+    const context = Reflect.get(request, 'x-context') || {}
+    context.type = context.type || 'user'
 
-    const instance = Reflect.construct(this.provider, [context])
+    const instance = Reflect.construct(this.provider, [{
+      context,
+      services: RpcClient.create(this.address, context),
+      systemServices: this.systemServices
+    }])
+
     try {
       return [Buffer.from(JSON.stringify(
         makeResponse(request.id, await Reflect.apply(Reflect.get(instance, method), instance, params))
