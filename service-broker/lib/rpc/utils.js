@@ -35,7 +35,7 @@ function makeResponse (id, result) {
   return {
     jsonrpc: '2.0',
     id: id,
-    result,
+    result
   }
 }
 
@@ -46,10 +46,12 @@ function makeErrorResponse (id = null, error, code, message) {
     error: {
       code: (typeof code === 'number' && code) || (typeof error.code === 'number' && error.code) || -1,
       message: message || error.message || 'Error message not available',
-      data: (error.stack || error.name) ? {
-        stack: error.stack || undefined,
-        name: error.name || undefined
-      } : undefined
+      data: (error.stack || error.name)
+        ? {
+            stack: error.stack || undefined,
+            name: error.name || undefined
+          }
+        : undefined
     }
   }
 }
