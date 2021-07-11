@@ -63,8 +63,20 @@ function makeErrorResponse (id = null, error, code, message) {
   }
 }
 
+function convertRpcErrorToNative (errorObject) {
+  const error = new Error(errorObject.message)
+  error.code = errorObject.code
+
+  errorObject.data = errorObject.data || {}
+  error.stack = errorObject.data.stack || errorObject.stack
+  error.name = errorObject.data.name || 'RpcError'
+
+  return errorObject
+}
+
 module.exports = {
   makeResponse,
   makeErrorResponse,
-  validateRequest
+  validateRequest,
+  convertRpcErrorToNative
 }

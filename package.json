@@ -19,7 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "@persona/api-gateway": "file:api-gateway",
-    "@persona/service-broker": "file:service-broker"
+    "@persona/service-broker": "file:service-broker",
+    "@persona/web-sdk": "file:web-sdk"
   },
   "devDependencies": {
     "husky": "^7.0.1",

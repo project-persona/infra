@@ -1,6 +1,7 @@
 const { v4: uuid } = require('uuid')
 
 const Client = require('../client')
+const { convertRpcErrorToNative } = require('./utils')
 
 const INSTANTIATION_TOKEN = Symbol('INSTANTIATION_TOKEN')
 
@@ -34,14 +35,7 @@ module.exports = class RpcClient extends Client {
               const response = JSON.parse(json.toString('utf-8'))
 
               if (response.error) {
-                const error = new Error(response.error.message)
-                error.code = response.error.code
-
-                response.error.data = response.error.data || {}
-                error.stack = response.error.data.stack || error.stack
-                error.name = response.error.data.name || 'RpcError'
-
-                throw error
+                throw convertRpcErrorToNative(response.error)
               }
 
               return response.result
