@@ -10,7 +10,7 @@ to your GitHub profile first!
 Install with NPM via Git:
 
 ```
-$ npm install -S git@github.com:project-persona/infra.git
+$ npm install -S https://github.com/project-persona/infra.git
 ```
 
 Remember to update the package when new version rolls out:
