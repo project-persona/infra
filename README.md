@@ -4,9 +4,6 @@ a collection of in-house infrastructure and tooling for the Persona project
 
 ## Installation
 
-You might need to [add your local SSH key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) 
-to your GitHub profile first!
-
 Install with NPM via Git:
 
 ```

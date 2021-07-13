@@ -1,4 +1,4 @@
-const { makeErrorResponse } = require('@persona/infra/service-broker/lib/rpc/utils')
+const { makeErrorResponse } = require('../../../service-broker/lib/rpc/utils')
 
 module.exports = (options = {}) => {
   return async (ctx, next) => {

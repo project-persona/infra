@@ -1,7 +1,7 @@
 const firebase = require('firebase')
 const { v4: uuid } = require('uuid')
 
-const { convertRpcErrorToNative } = require('@persona/infra/service-broker/lib/rpc/utils')
+const { convertRpcErrorToNative } = require('../../service-broker/lib/rpc/utils')
 
 const INSTANTIATION_TOKEN = Symbol('INSTANTIATION_TOKEN')
 

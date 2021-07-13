@@ -1,5 +1,5 @@
-const { Client } = require('@persona/infra/service-broker')
-const { makeErrorResponse, validateRequest } = require('@persona/infra/service-broker/lib/rpc/utils')
+const { Client } = require('../../../service-broker')
+const { makeErrorResponse, validateRequest } = require('../../../service-broker/lib/rpc/utils')
 
 module.exports = ({ brokerAddress }) => {
   return async (ctx, next) => {
