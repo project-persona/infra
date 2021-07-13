@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@csil-git1.cs.surrey.sfu.ca:cmpt-470-project-group-6/infra"
+    "url": "git@github.com:project-persona/infra.git"
   },
   "author": "",
   "license": "MIT",
