@@ -18,9 +18,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@persona/api-gateway": "file:api-gateway",
-    "@persona/service-broker": "file:service-broker",
-    "@persona/web-sdk": "file:web-sdk"
+    "firebase": "^8.7.1",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compress": "^5.0.1",
+    "uuid": "^8.3.2",
+    "zeromq": "^6.0.0-beta.6"
   },
   "devDependencies": {
     "husky": "^7.0.1",
