@@ -17,6 +17,7 @@ module.exports = class RpcWorker extends Worker {
     this.provider = provider
 
     this.systemServices = RpcClient.create(address, { type: 'system' })
+    this.initialized = false
   }
 
   async process (buffer) {
@@ -76,8 +77,17 @@ module.exports = class RpcWorker extends Worker {
     }])
 
     try {
+      if (!this.initialized) {
+        await instance[RpcProvider.init]()
+        this.initialized = true
+      }
+
+      await instance[RpcProvider.before]()
+      const result = await Reflect.apply(Reflect.get(instance, method), instance, params)
+      await instance[RpcProvider.after]()
+
       return [Buffer.from(JSON.stringify(
-        makeResponse(request.id, await Reflect.apply(Reflect.get(instance, method), instance, params))
+        makeResponse(request.id, result)
       ), 'utf-8')]
     } catch (err) {
       return [Buffer.from(JSON.stringify(
