@@ -45,7 +45,7 @@ It is recommended to start the bus itself before any worker/client.
 To start a bus process:
 
 ```
-$ npm run service-broker
+$ npm run start-broker
 ```
 
 #### Worker Process
@@ -110,7 +110,7 @@ It is recommended to start the gateway after the bus has started.
 To start a bus process:
 
 ```
-$ npm run gateway
+$ npm run start-gateway
 ```
 
 Optional environment variables:
