@@ -9,12 +9,12 @@ module.exports = class Worker {
     this.address = address
     this.socket = new Dealer()
     this.service = ''
-
-    console.log(`Connecting to broker at: ${address}`)
-    this.socket.connect(address)
   }
 
   async start () {
+    console.log(`Connecting to broker at: ${this.address}`)
+    this.socket.connect(this.address)
+
     await this.socket.send([null, Header.Worker, Message.Ready, this.service])
 
     for await (const [/* unused */, /* header */, /* type */, client, /* unused */, ...req] of this.socket) {
