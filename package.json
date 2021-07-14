@@ -5,8 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start-broker": "npm start --prefix ./service-broker",
-    "start-gateway": "npm start --prefix ./api-gateway",
+    "start-broker": "node service-broker/bin/start-broker.js",
+    "start-gateway": "node api-gateway/bin/start-gateway.js",
     "lint": "standard",
     "test": "npm run lint && echo \"Warning: no test specified\"",
     "prepare": "husky install"
