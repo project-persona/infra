@@ -10,6 +10,7 @@ module.exports = class Worker {
     this.socket = new Dealer()
     this.service = ''
 
+    console.log(`Connecting to broker at: ${address}`)
     this.socket.connect(address)
   }
 
