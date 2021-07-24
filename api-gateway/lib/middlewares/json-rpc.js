@@ -1,6 +1,8 @@
 const { Client } = require('../../../service-broker')
 const { makeErrorResponse, validateRequest } = require('../../../service-broker/lib/rpc/utils')
 
+const { NODE_ENV } = require('./config')
+
 module.exports = ({ brokerAddress }) => {
   return async (ctx, next) => {
     if (ctx.request.method !== 'POST') {
@@ -18,7 +20,7 @@ module.exports = ({ brokerAddress }) => {
 
     const service = request.method.substring(0, request.method.indexOf('/'))
 
-    request['x-context'] = request['x-context'] || {}
+    request['x-context'] = NODE_ENV === 'development' ? (request['x-context'] || {}) : {}
     if (ctx.request.headers.authorization) {
       request['x-context'].authorization = ctx.request.headers.authorization
     }

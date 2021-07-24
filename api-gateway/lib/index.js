@@ -2,9 +2,15 @@ const http = require('http')
 
 const App = require('./app')
 
-const { PORT, HOST, BROKER_ADDR } = require('./config')
+const { NODE_ENV, PORT, HOST, BROKER_ADDR } = require('./config')
 
 const app = new App()
+
+// cors
+if (NODE_ENV === 'development') {
+  const cors = require('./middlewares/cors')
+  app.use(cors())
+}
 
 // koa-compress
 {
