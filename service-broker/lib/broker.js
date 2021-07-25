@@ -66,7 +66,7 @@ module.exports = class Broker {
         break
 
       case Message.Heartbeat:
-        console.warn('Heartbeats are not implemented!')
+        this.processHeartbeat(worker)
         break
 
       case Message.Disconnect:
@@ -90,6 +90,11 @@ module.exports = class Broker {
   dispatchReply (worker, client, ...rep) {
     const service = this.getWorkerService(worker)
     this.getService(service).dispatchReply(worker, client, ...rep).catch(console.error)
+  }
+
+  processHeartbeat (worker) {
+    const service = this.getWorkerService(worker)
+    this.getService(service).processHeartbeat(worker)
   }
 
   deregister (worker) {
