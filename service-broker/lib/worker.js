@@ -13,7 +13,7 @@ module.exports = class Worker {
     this.timeoutId = 0
   }
 
-  async start () {
+  async start (beforeListening = () => undefined) {
     console.log(`Connecting to broker at: ${this.address}`)
     this.socket.connect(this.address)
 
@@ -21,6 +21,8 @@ module.exports = class Worker {
     console.log('Worker ready')
 
     this.resetHeartbeat()
+
+    await beforeListening()
 
     for await (const [/* unused */, /* header */, /* type */, client, /* unused */, ...req] of this.socket) {
       this.handleRequest(client, ...req).catch(console.error)
@@ -39,8 +41,15 @@ module.exports = class Worker {
     }
   }
 
+  /**
+   *
+   * @param client {Buffer}
+   * @param req
+   */
   async handleRequest (client, ...req) {
+    console.log(`Handling request from ${client.toString('hex')}`)
     const rep = await this.process(...req)
+    console.log(`Request processed. Sending result back to ${client.toString('hex')}`)
     await this.dispatchReply(client, ...rep)
   }
 

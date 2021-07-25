@@ -21,6 +21,12 @@ module.exports = class RpcWorker extends Worker {
   }
 
   async process (buffer) {
+    if (!this.initialized) {
+      return [Buffer.from(JSON.stringify(
+        makeErrorResponse(null, new Error('Service not yet ready'), -1) // -32600: Parse error
+      ), 'utf-8')]
+    }
+
     let request
     try {
       request = JSON.parse(buffer.toString('utf-8'))
@@ -77,11 +83,6 @@ module.exports = class RpcWorker extends Worker {
     }])
 
     try {
-      if (!this.initialized) {
-        await instance[RpcProvider.init]()
-        this.initialized = true
-      }
-
       await instance[RpcProvider.before]()
       const result = await Reflect.apply(Reflect.get(instance, method), instance, params)
       await instance[RpcProvider.after]()
@@ -90,9 +91,26 @@ module.exports = class RpcWorker extends Worker {
         makeResponse(request.id, result)
       ), 'utf-8')]
     } catch (err) {
+      console.error(err)
       return [Buffer.from(JSON.stringify(
         makeErrorResponse(request.id, err)
       ), 'utf-8')]
     }
+  }
+
+  async start () {
+    return await super.start(async () => {
+      const context = { type: 'system' }
+      const instance = Reflect.construct(this.provider, [{
+        context,
+        services: RpcClient.create(this.address, context),
+        systemServices: this.systemServices
+      }])
+
+      console.log('Running init hook... Service will not be up until this is completed.')
+      await instance[RpcProvider.init]()
+      this.initialized = true
+      console.log('RpcProvider initialized!')
+    })
   }
 }
