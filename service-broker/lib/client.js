@@ -2,7 +2,7 @@ const { Request } = require('zeromq')
 
 const { Header } = require('./types')
 
-const { BROKER_ADDR } = require('./config')
+const { BROKER_ADDR, RECEIVE_TIMEOUT } = require('./config')
 
 module.exports = class Client {
   constructor (address = BROKER_ADDR) {
@@ -11,7 +11,7 @@ module.exports = class Client {
 
   async request (service, ...req) {
     // XXX: we rely on zmq router to distinguish different requests by the same client.
-    const socket = new Request({ receiveTimeout: 2000 }) // TODO: extract constants to config?
+    const socket = new Request({ receiveTimeout: RECEIVE_TIMEOUT })
     socket.connect(this.address)
 
     console.log(`Requesting service '${service}' with ${req.reduce((acc, cur) => acc + cur.length, 0)} bytes payload`)
