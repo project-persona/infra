@@ -94,7 +94,9 @@ module.exports = class Broker {
 
   processHeartbeat (worker) {
     const service = this.getWorkerService(worker)
-    this.getService(service).processHeartbeat(worker)
+    if (service) {
+      this.getService(service).processHeartbeat(worker)
+    }
   }
 
   deregister (worker) {
