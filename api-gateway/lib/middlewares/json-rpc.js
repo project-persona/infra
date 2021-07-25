@@ -1,7 +1,7 @@
 const { Client } = require('../../../service-broker')
 const { makeErrorResponse, validateRequest } = require('../../../service-broker/lib/rpc/utils')
 
-const { NODE_ENV } = require('./config')
+const { NODE_ENV } = require('../config')
 
 module.exports = ({ brokerAddress }) => {
   return async (ctx, next) => {

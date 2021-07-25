@@ -1,6 +1,6 @@
 {
   "name": "@persona/infra",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "in-house infrastructure and tooling for the Persona project",
   "main": "index.js",
   "private": true,

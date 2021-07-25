@@ -71,7 +71,7 @@ function convertRpcErrorToNative (errorObject) {
   error.stack = errorObject.data.stack || errorObject.stack
   error.name = errorObject.data.name || 'RpcError'
 
-  return errorObject
+  return error
 }
 
 module.exports = {
