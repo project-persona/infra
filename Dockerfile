@@ -1,5 +1,7 @@
 FROM node:lts-alpine
 
+ADD ./ /app
+
 RUN cd /app \
     && npm install
 
