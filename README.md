@@ -23,8 +23,8 @@ a Zero-MQ powered service-oriented message queue in many-to-many request/reply p
 
 ![Architecture Diagram](https://rfc.zeromq.org/rfcs/7/1.png)
 
-Basically JSON-RPC 2.0 (with tweaks) over 7/MDP. For more information, see [documentation](service-broker). Note: 
-heartbeat and down detection currently not implemented due to time constraints.
+Basically JSON-RPC 2.0 (with tweaks) over 7/MDP. For more information, see [documentation](service-broker). ~~Note: 
+heartbeat and down detection currently not implemented due to time constraints.~~
 
 ### Configurations
 
